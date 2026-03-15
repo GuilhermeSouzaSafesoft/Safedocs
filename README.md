@@ -66,7 +66,6 @@ Exemplo mínimo:
     "date": "2026-03-15"
   },
   "blocks": [
-    { "type": "title", "text": "Exemplo mínimo de documento" },
     { "type": "paragraph", "style": "body", "text": "Parágrafo de exemplo." }
   ]
 }
@@ -82,10 +81,6 @@ Exemplo mínimo:
 - `cover_image_path` (opcional, str) – caminho da imagem da capa; se omitido, usa o placeholder padrão.
 
 ##### Tipos de blocos suportados (`blocks[*].type`)
-
-- `title`
-  - Campos: `text` (str).
-  - Renderiza um título centralizado usando o estilo `cover_document_type`.
 
 - `paragraph`
   - Campos:

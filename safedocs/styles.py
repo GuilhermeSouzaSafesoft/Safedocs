@@ -75,8 +75,6 @@ PARAGRAPH_STYLES = {
         "space_after": 0,
     },
 }
-
-
 RUN_STYLES = {
     "cover_document_type": {
         "font_name": "Corbel",

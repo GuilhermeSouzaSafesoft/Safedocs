@@ -7,7 +7,6 @@ from typing import Any, Dict, List, Optional
 
 
 class BlockType(str, Enum):
-    TITLE = "title"
     PARAGRAPH = "paragraph"
     HEADING = "heading"
     BULLETS = "bullets"

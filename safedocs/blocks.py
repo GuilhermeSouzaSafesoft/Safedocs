@@ -180,13 +180,7 @@ def render_image(doc: Document, block: Mapping[str, Any], placeholder_image: Pat
 def render_block(doc: Document, block: Dict[str, Any], placeholder_image: Path | str | None = None) -> None:
     block_type = block.get("type")
 
-    if block_type == "title":
-        title_block = dict(block)
-        title_block["style"] = "cover_document_type"
-        title_block["run_style"] = "cover_document_type"
-        render_paragraph(doc, title_block)
-
-    elif block_type == "paragraph":
+    if block_type == "paragraph":
         render_paragraph(doc, block)
 
     elif block_type == "heading":
