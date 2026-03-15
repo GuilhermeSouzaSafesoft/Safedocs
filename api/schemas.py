@@ -13,9 +13,30 @@ class MetaSchema(BaseModel):
     data: str
 
 
+class RunSchema(BaseModel):
+    text: str
+    style: str | None = None
+
+
+class BlockSchema(BaseModel):
+    type: str
+    text: str | None = None
+    style: str | None = None
+    run_style: str | None = None
+    runs: List[RunSchema] | None = None
+    items: List[Any] | None = None
+    columns: List[str] | None = None
+    rows: List[List[Any]] | None = None
+    path: str | None = None
+    caption: str | None = None
+
+    class Config:
+        extra = "allow"
+
+
 class DocumentSchema(BaseModel):
     meta: MetaSchema
-    blocks: List[Dict[str, Any]]
+    blocks: List[BlockSchema]
 
     class Config:
         schema_extra = {
