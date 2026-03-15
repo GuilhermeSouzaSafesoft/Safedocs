@@ -1,8 +1,27 @@
+import re
 from typing import Any
 
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import RGBColor
+
+
+def slugify_for_filename(value: str) -> str:
+    """
+    Normalize a string for use as a filename segment.
+    """
+    if not value:
+        return "documento"
+
+    cleaned = re.sub(r"[^\w\s-]", "", value, flags=re.UNICODE)
+    cleaned = cleaned.strip()
+    cleaned = re.sub(r"[\s]+", "_", cleaned)
+    cleaned = re.sub(r"_+", "_", cleaned)
+
+    if not cleaned:
+        return "documento"
+
+    return cleaned
 
 
 def hex_to_rgb(hex_color: str) -> RGBColor:

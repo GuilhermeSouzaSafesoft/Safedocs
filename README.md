@@ -47,6 +47,8 @@ python -m safedocs.cli \
   --placeholder-image templates/imagem.png
 ```
 
+A saída final sempre será escrita dentro do diretório especificado em `--output`; o nome do arquivo é gerado automaticamente como `codigo-tipo_do_documento.docx`, usando os campos `codigo` e `tipo_do_documento` do JSON (`data` e `revisao` continuam sendo usados apenas na capa).
+
 #### Formato do JSON
 
 O JSON deve conter dois campos principais:

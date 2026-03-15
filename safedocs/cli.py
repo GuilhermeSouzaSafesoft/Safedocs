@@ -5,6 +5,7 @@ import json
 from .config import JSON_FILE, OUTPUT_DIR, OUTPUT_FILE, PLACEHOLDER_IMAGE, TEMPLATE_FILE
 from .generator import gerar_documento, validar_arquivos
 from .models import DocumentData, load_document_data
+from .utils import slugify_for_filename
 
 
 def parse_args() -> argparse.Namespace:
@@ -53,14 +54,17 @@ def run_from_cli() -> None:
 
     document_data: DocumentData = load_document_data(raw_data)
 
+    filename = f"{slugify_for_filename(document_data.meta.codigo)}-{slugify_for_filename(document_data.meta.tipo_do_documento)}.docx"
+    final_output = output_dir / filename
+
     gerar_documento(
         dados=document_data,
         template_file=args.template,
-        output_file=args.output,
+        output_file=final_output,
         placeholder_image=args.placeholder_image,
     )
 
-    print(f"Documento gerado com sucesso em: {args.output}")
+    print(f"Documento gerado com sucesso em: {final_output}")
 
 
 if __name__ == "__main__":
