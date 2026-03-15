@@ -1,117 +1,123 @@
 {
   "meta": {
-    "document_type": "Documento de Demonstração",
-    "item_name": "Safedocs - Todos os blocos",
-    "document_code": "DOC-DEMO-001",
-    "revision": "A",
-    "date": "2026-03-15",
-    "cover_image_path": "templates/imagem.png"
+    "tipo_do_documento": "Guia de Demonstração",
+    "nome_do_item": "Safedocs — Exemplos completos",
+    "codigo": "GUIDE-2026-02",
+    "revisao": "B",
+    "data": "2026-03-15"
   },
   "blocks": [
     {
-      "type": "heading",
-      "level": 1,
-      "text": "1. Visão geral dos blocos"
+      "type": "secao",
+      "text": "Seção 1 — Visão geral"
     },
     {
-      "type": "paragraph",
+      "type": "paragrafo",
       "style": "body",
-      "text": "Este documento mostra como cada bloco disponível é renderizado a partir de um JSON."
+      "text": "Este documento visa demonstrar cada bloco suportado pelo Safedocs e servir como referência para a IA que gera o JSON."
     },
     {
-      "type": "paragraph",
-      "style": "body",
+      "type": "paragrafo",
       "runs": [
-        { "text": "Você pode combinar " },
-        { "text": "texto em negrito azul", "style": "bold" },
+        { "text": "Você pode mesclar " },
+        { "text": "negrito azul", "style": "bold" },
         { "text": ", " },
-        { "text": "texto azul padrão", "style": "blue" },
-        { "text": ", " },
+        { "text": "texto azul", "style": "blue" },
+        { "text": " ou " },
         { "text": "itálico", "style": "italic" },
-        { "text": " e " },
+        { "text": ", " },
         { "text": "itálico azul", "style": "blue_italic" },
-        { "text": " dentro de um mesmo parágrafo." }
+        { "text": " e manter tudo fluido no mesmo parágrafo." }
       ]
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "2. Cabeçalhos"
+      "type": "subsecao",
+      "text": "Subseção 1.1 — Geração"
     },
     {
-      "type": "heading",
-      "level": 2,
-      "text": "2.1 Heading nível 2"
+      "type": "paragrafo",
+      "text": "As seções usam estilos diferenciados para evitar confusão visual, enquanto o restante do texto permanece em corpo justificado."
     },
     {
-      "type": "heading",
-      "level": 3,
-      "text": "2.2 Heading nível 3"
+      "type": "subsubsecao",
+      "text": "Subsubseção 1.1.1 — Estrutura"
     },
     {
-      "type": "heading",
-      "level": 4,
-      "text": "2.3 Heading nível 4"
+      "type": "paragrafo",
+      "text": "Cada bloco JSON possui campos simples: apenas escreva o tipo correto em português e o Safedocs renderiza o estilo correspondente."
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "3. Listas e tabelas"
+      "type": "subsubsubsecao",
+      "text": "Subsubsubseção 1.1.1.1 — Validação"
     },
     {
-      "type": "paragraph",
-      "text": "A seguir exibimos exemplos de listas com marcadores e numeradas."
+      "type": "paragrafo",
+      "text": "O validador garante que o JSON contenha os campos obrigatórios e rejeita blocos desconhecidos."
     },
     {
-      "type": "bullets",
+      "type": "secao",
+      "text": "Seção 2 — Listas e Tabelas"
+    },
+    {
+      "type": "lista_com_marcadores",
       "items": [
-        "Marcador A",
-        "Marcador B",
-        "Marcador C"
+        "Marcador 1 — apresentado em estilo bullet",
+        "Marcador 2 — com conteúdo explicativo",
+        "Marcador 3 — ainda em bullet"
       ]
     },
     {
-      "type": "numbered",
+      "type": "lista_numerada",
       "items": [
-        "Primeira etapa",
-        "Segunda etapa",
-        "Terceira etapa"
+        "Primeira etapa do processo",
+        "Segunda etapa analítica",
+        "Terceira etapa validada"
       ]
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "4. Tabela e imagem"
+      "type": "paragrafo",
+      "text": "A seguir, uma tabela resume as entradas possíveis."
     },
     {
-      "type": "paragraph",
-      "text": "A tabela descreve três colunas e a imagem abaixo usa o placeholder configurado."
-    },
-    {
-      "type": "table",
-      "columns": ["Coluna A", "Coluna B", "Coluna C"],
+      "type": "tabela",
+      "columns": ["Atributo", "Descrição", "Exemplo"],
       "rows": [
-        ["Valor 1A", "Valor 1B", "Valor 1C"],
-        ["Valor 2A", "Valor 2B", "Valor 2C"],
-        ["Valor 3A", "Valor 3B", "Valor 3C"]
+        ["tipo_do_documento", "Nome do documento", "Guia de Demonstração"],
+        ["nome_do_item", "Produto principal", "Safedocs — Exemplos completos"],
+        ["codigo", "Identificador", "GUIDE-2026-02"]
       ]
     },
     {
-      "type": "image",
+      "type": "secao",
+      "text": "Seção 3 — Imagens e Quebra"
+    },
+    {
+      "type": "paragrafo",
+      "text": "A imagem abaixo usa o placeholder padrão; a IA pode enviar qualquer caminho, mas o Safedocs recai no placeholder configurado quando não encontra o arquivo."
+    },
+    {
+      "type": "imagem",
       "path": "templates/imagem.png",
-      "caption": "Figura 1 - Imagem de placeholder usada como exemplo"
+      "caption": "Figura 1 — Placeholder padrão"
     },
     {
-      "type": "page_break"
+      "type": "paragrafo",
+      "text": "Após a imagem, forçamos uma quebra para ilustrar o comando `quebra_de_pagina`."
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "5. Encerramento"
+      "type": "quebra_de_pagina"
     },
     {
-      "type": "paragraph",
-      "text": "Depois da quebra de página, mantemos o padrão de blocos e encerramos o documento."
+      "type": "secao",
+      "text": "Seção 4 — Conclusão"
+    },
+    {
+      "type": "paragrafo",
+      "text": "Com este exemplo a IA pode inferir como mapear blocos textuais, listas, tabelas e imagens ao JSON reconhecido pelo Safedocs."
+    },
+    {
+      "type": "paragrafo",
+      "text": "Documentação completa: código, data e revisão aparecem na capa, seções ficam hierarquizadas e as runs demonstram variações de estilo."
     }
   ]
 }

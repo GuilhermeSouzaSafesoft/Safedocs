@@ -7,23 +7,25 @@ from typing import Any, Dict, List, Optional
 
 
 class BlockType(str, Enum):
-    PARAGRAPH = "paragraph"
-    HEADING = "heading"
-    BULLETS = "bullets"
-    NUMBERED = "numbered"
-    TABLE = "table"
-    IMAGE = "image"
-    PAGE_BREAK = "page_break"
+    PARAGRAFO = "paragrafo"
+    SECAO = "secao"
+    SUBSECAO = "subsecao"
+    SUBSUBSECAO = "subsubsecao"
+    SUBSUBSUBSECAO = "subsubsubsecao"
+    LISTA = "lista_com_marcadores"
+    LISTA_NUMERADA = "lista_numerada"
+    TABELA = "tabela"
+    IMAGEM = "imagem"
+    QUEBRA_DE_PAGINA = "quebra_de_pagina"
 
 
 @dataclass
 class Meta:
-    document_type: str
-    item_name: str
-    document_code: str
-    revision: str
-    date: str
-    cover_image_path: Optional[Path] = None
+    tipo_do_documento: str
+    nome_do_item: str
+    codigo: str
+    revisao: str
+    data: str
 
 
 @dataclass
@@ -62,12 +64,11 @@ def load_document_data(json_data: Dict[str, Any]) -> DocumentData:
         raise InvalidDocumentError("Campo 'blocks' deve ser uma lista.")
 
     meta = Meta(
-        document_type=str(meta_raw.get("document_type", "")).strip(),
-        item_name=str(meta_raw.get("item_name", "")).strip(),
-        document_code=str(meta_raw.get("document_code", "")).strip(),
-        revision=str(meta_raw.get("revision", "")).strip(),
-        date=str(meta_raw.get("date", "")).strip(),
-        cover_image_path=Path(meta_raw["cover_image_path"]) if meta_raw.get("cover_image_path") else None,
+        tipo_do_documento=str(meta_raw.get("tipo_do_documento", "")).strip(),
+        nome_do_item=str(meta_raw.get("nome_do_item", "")).strip(),
+        codigo=str(meta_raw.get("codigo", "")).strip(),
+        revisao=str(meta_raw.get("revisao", "")).strip(),
+        data=str(meta_raw.get("data", "")).strip(),
     )
 
     blocks: List[Block] = []

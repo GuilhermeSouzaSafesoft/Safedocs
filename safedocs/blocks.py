@@ -68,18 +68,8 @@ def render_paragraph(doc: Document, block: Mapping[str, Any]) -> None:
         add_text_with_style(p, text, run_style_name)
 
 
-def render_heading(doc: Document, block: Mapping[str, Any]) -> None:
-    level = int(block.get("level", 1))
+def render_heading_block(doc: Document, block: Mapping[str, Any], style_key: str) -> None:
     text = block.get("text", "")
-
-    if level <= 1:
-        style_key = "heading_1"
-    elif level == 2:
-        style_key = "heading_2"
-    elif level == 3:
-        style_key = "heading_3"
-    else:
-        style_key = "heading_4"
 
     p = doc.add_paragraph()
     apply_paragraph_format(p, style_key)
@@ -180,27 +170,26 @@ def render_image(doc: Document, block: Mapping[str, Any], placeholder_image: Pat
 def render_block(doc: Document, block: Dict[str, Any], placeholder_image: Path | str | None = None) -> None:
     block_type = block.get("type")
 
-    if block_type == "paragraph":
+    if block_type == "paragrafo":
         render_paragraph(doc, block)
-
-    elif block_type == "heading":
-        render_heading(doc, block)
-
-    elif block_type == "bullets":
+    elif block_type == "secao":
+        render_heading_block(doc, block, "secao")
+    elif block_type == "subsecao":
+        render_heading_block(doc, block, "subsecao")
+    elif block_type == "subsubsecao":
+        render_heading_block(doc, block, "subsubsecao")
+    elif block_type == "subsubsubsecao":
+        render_heading_block(doc, block, "subsubsubsecao")
+    elif block_type == "lista_com_marcadores":
         render_bullets(doc, block)
-
-    elif block_type == "numbered":
+    elif block_type == "lista_numerada":
         render_numbered(doc, block)
-
-    elif block_type == "table":
+    elif block_type == "tabela":
         render_table(doc, block)
-
-    elif block_type == "image":
+    elif block_type == "imagem":
         render_image(doc, block, placeholder_image=placeholder_image)
-
-    elif block_type == "page_break":
+    elif block_type == "quebra_de_pagina":
         doc.add_page_break()
-
     else:
         p = doc.add_paragraph()
         apply_paragraph_format(p, "body")

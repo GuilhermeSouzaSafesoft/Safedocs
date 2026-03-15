@@ -45,24 +45,22 @@ def gerar_capa(
     """
     Gera a página de capa do documento a partir dos metadados.
     """
-    document_type = meta.document_type.upper()
-    item_name = meta.item_name
-    document_code = meta.document_code
-    revision = meta.revision
-    date = meta.date
+    document_type = meta.tipo_do_documento.upper()
+    item_name = meta.nome_do_item
+    document_code = meta.codigo
+    revision = meta.revisao
+    date = meta.data
 
-    cover_image_path: Optional[Union[str, Path]] = None
-    if meta.cover_image_path is not None and Path(meta.cover_image_path).exists():
-        cover_image_path = meta.cover_image_path
-    elif placeholder_image is not None and Path(str(placeholder_image)).exists():
-        cover_image_path = placeholder_image
+    placeholder_path: Optional[Union[str, Path]] = None
+    if placeholder_image is not None and Path(str(placeholder_image)).exists():
+        placeholder_path = placeholder_image
 
     _add_cover_line(doc, document_type, "cover_document_type", "cover_document_type")
     _add_cover_line(doc, item_name, "cover_item_name", "cover_item_name")
 
     _add_cover_spacing(doc, lines=2)
-    if cover_image_path is not None:
-        _add_cover_image(doc, cover_image_path)
+    if placeholder_path is not None:
+        _add_cover_image(doc, placeholder_path)
     _add_cover_spacing(doc, lines=2)
 
     _add_cover_line(doc, f"Código: {document_code}", "cover_meta", "cover_meta")

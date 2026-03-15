@@ -19,22 +19,22 @@ PARAGRAPH_STYLES = {
         "space_before": 0,
         "space_after": 6,
     },
-    "heading_1": {
+    "secao": {
         "align": "left",
         "space_before": 12,
         "space_after": 6,
     },
-    "heading_2": {
+    "subsecao": {
         "align": "left",
         "space_before": 10,
         "space_after": 4,
     },
-    "heading_3": {
+    "subsubsecao": {
         "align": "left",
         "space_before": 8,
         "space_after": 3,
     },
-    "heading_4": {
+    "subsubsubsecao": {
         "align": "left",
         "space_before": 6,
         "space_after": 3,
@@ -97,28 +97,28 @@ RUN_STYLES = {
         "italic": False,
         "color": BLACK_HEX,
     },
-    "heading_1": {
+    "secao": {
         "font_name": "Corbel",
         "font_size": 20,
         "bold": True,
         "italic": False,
         "color": BLUE_HEX,
     },
-    "heading_2": {
+    "subsecao": {
         "font_name": "Corbel",
         "font_size": 16,
         "bold": True,
         "italic": False,
         "color": BLUE_HEX,
     },
-    "heading_3": {
+    "subsubsecao": {
         "font_name": "Corbel",
         "font_size": 14,
         "bold": True,
         "italic": False,
         "color": BLUE_HEX,
     },
-    "heading_4": {
+    "subsubsubsecao": {
         "font_name": "Corbel",
         "font_size": 12,
         "bold": True,
