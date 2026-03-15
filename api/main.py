@@ -7,7 +7,13 @@ from api.schemas import ActionResponse, DocumentSchema, ActionFile
 from api.services import generate_docx_from_payload
 from safedocs.models import InvalidDocumentError
 
-app = FastAPI(title="Safedocs Docx API", version="0.1.0")
+app = FastAPI(
+    title="Safedocs Docx API",
+    version="0.1.0",
+    servers=[
+        {"url": "https://safedocs.onrender.com", "description": "Production"}
+    ],
+)
 
 
 @app.get("/")
