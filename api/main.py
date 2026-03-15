@@ -4,8 +4,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
 from api.schemas import (
-    ActionResponse,
     ActionFile,
+    ActionResponse,
     DocumentSchema,
     HealthResponse,
     RootResponse,
@@ -32,10 +32,16 @@ def health() -> HealthResponse:
     return HealthResponse(status="healthy")
 
 
+def _payload_to_dict(payload: DocumentSchema) -> dict:
+    if hasattr(payload, "model_dump"):
+        return payload.model_dump()
+    return payload.dict()
+
+
 @app.post("/generate-docx")
 def generate_docx(payload: DocumentSchema) -> FileResponse:
     try:
-        doc_path = generate_docx_from_payload(payload.model_dump())
+        doc_path = generate_docx_from_payload(_payload_to_dict(payload))
     except InvalidDocumentError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
@@ -50,7 +56,7 @@ def generate_docx(payload: DocumentSchema) -> FileResponse:
 @app.post("/generate-docx-action", response_model=ActionResponse)
 def generate_docx_action(payload: DocumentSchema) -> ActionResponse:
     try:
-        doc_path = generate_docx_from_payload(payload.model_dump())
+        doc_path = generate_docx_from_payload(_payload_to_dict(payload))
     except InvalidDocumentError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
