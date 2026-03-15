@@ -1,4 +1,6 @@
-from docx.shared import Pt
+from pathlib import Path
+
+from docx.shared import Pt, Cm
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from styles import PARAGRAPH_STYLES, RUN_STYLES, BLUE_HEX
@@ -130,10 +132,41 @@ def render_table(doc, block):
             add_text_with_style(p, value, "table_cell")
 
 
-def render_image_caption(doc, block):
+def render_image_caption(doc, text):
     p = doc.add_paragraph()
     apply_paragraph_format(p, "caption")
-    add_text_with_style(p, block.get("text", ""), "caption")
+    add_text_with_style(p, text, "caption")
+
+
+def render_image(doc, block, placeholder_image=None):
+    image_path = block.get("path", "")
+    width_cm = block.get("width_cm", 8)
+    caption = block.get("caption", "")
+
+    final_image_path = None
+
+    if image_path and Path(image_path).exists():
+        final_image_path = image_path
+    elif placeholder_image and Path(placeholder_image).exists():
+        final_image_path = str(placeholder_image)
+
+    if final_image_path is None:
+        p = doc.add_paragraph()
+        apply_paragraph_format(p, "body")
+        add_text_with_style(p, "[Imagem não encontrada]", "body")
+
+        if caption:
+            render_image_caption(doc, caption)
+        return
+
+    p = doc.add_paragraph()
+    apply_paragraph_format(p, "image")
+
+    run = p.add_run()
+    run.add_picture(final_image_path, width=Cm(width_cm))
+
+    if caption:
+        render_image_caption(doc, caption)
 
 
 def render_section_divider(doc):
@@ -143,7 +176,7 @@ def render_section_divider(doc):
     p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 
-def render_block(doc, block):
+def render_block(doc, block, placeholder_image=None):
     block_type = block.get("type")
 
     if block_type == "title":
@@ -158,6 +191,9 @@ def render_block(doc, block):
     elif block_type == "heading":
         render_heading(doc, block)
 
+    elif block_type == "section_divider":
+        render_section_divider(doc)
+
     elif block_type == "bullets":
         render_bullets(doc, block)
 
@@ -167,8 +203,8 @@ def render_block(doc, block):
     elif block_type == "table":
         render_table(doc, block)
 
-    elif block_type == "image_caption":
-        render_image_caption(doc, block)
+    elif block_type == "image":
+        render_image(doc, block, placeholder_image=placeholder_image)
 
     elif block_type == "page_break":
         doc.add_page_break()

@@ -4,6 +4,21 @@ BLACK_HEX = "000000"
 
 
 PARAGRAPH_STYLES = {
+    "cover_document_type": {
+    "align": "center",
+    "space_before": 0,
+    "space_after": 12,
+},
+"cover_item_name": {
+    "align": "center",
+    "space_before": 0,
+    "space_after": 12,
+},
+"cover_meta": {
+    "align": "center",
+    "space_before": 0,
+    "space_after": 6,
+},
     "title": {
         "align": "center",
         "space_before": 0,
@@ -49,6 +64,11 @@ PARAGRAPH_STYLES = {
         "space_before": 3,
         "space_after": 8,
     },
+    "image": {
+        "align": "center",
+        "space_before": 6,
+        "space_after": 3,
+    },
     "table_header": {
         "align": "center",
         "space_before": 0,
@@ -63,6 +83,27 @@ PARAGRAPH_STYLES = {
 
 
 RUN_STYLES = {
+    "cover_document_type": {
+    "font_name": "Corbel",
+    "font_size": 22,
+    "bold": True,
+    "italic": False,
+    "color": BLUE_HEX,
+},
+"cover_item_name": {
+    "font_name": "Corbel",
+    "font_size": 18,
+    "bold": False,
+    "italic": False,
+    "color": BLACK_HEX,
+},
+"cover_meta": {
+    "font_name": "Corbel",
+    "font_size": 12,
+    "bold": False,
+    "italic": False,
+    "color": BLACK_HEX,
+},
     "title": {
         "font_name": "Corbel",
         "font_size": 28,

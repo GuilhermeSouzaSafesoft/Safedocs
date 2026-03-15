@@ -1,3 +1,7 @@
+from docx.shared import RGBColor
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+
 def hex_to_rgb(hex_color: str):
     hex_color = hex_color.replace("#", "").strip()
     return RGBColor(

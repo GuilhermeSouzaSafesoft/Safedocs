@@ -4,21 +4,21 @@
     "item_name": "Cartão CR80 sem chip",
     "document_code": "016.000.000.0001",
     "revision": "A",
-    "date": "2026-03-11"
+    "date": "2026-03-13",
+    "cover_image_path": "imagem.png",
+    "cover_image_width_cm": 6
   },
   "blocks": [
     {
       "type": "title",
       "text": "TÍTULO DO DOCUMENTO"
     },
-
     {
       "type": "paragraph",
       "style": "body",
       "run_style": "body",
       "text": "Este documento contém exemplos visuais de formatação para servir como base de template."
     },
-
     {
       "type": "paragraph",
       "style": "body",
@@ -34,7 +34,6 @@
         { "text": "." }
       ]
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -46,7 +45,6 @@
       "run_style": "body",
       "text": "Exemplo de texto abaixo de uma seção."
     },
-
     {
       "type": "heading",
       "level": 2,
@@ -61,7 +59,6 @@
         { "text": " deve sempre ficar em azul." }
       ]
     },
-
     {
       "type": "heading",
       "level": 3,
@@ -78,7 +75,6 @@
         { "text": "." }
       ]
     },
-
     {
       "type": "heading",
       "level": 4,
@@ -90,7 +86,6 @@
       "run_style": "body",
       "text": "Exemplo de texto abaixo de uma subsubsubseção."
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -102,7 +97,6 @@
       "run_style": "blue",
       "text": "Este parágrafo inteiro usa run_style azul, sem precisar quebrar o texto em vários runs."
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -116,7 +110,6 @@
         "Terceiro item com marcador"
       ]
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -130,7 +123,6 @@
         "Terceiro item enumerado"
       ]
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -148,23 +140,23 @@
         ["Tabela", "Bloco", "table_header / table_cell", "Cabeçalho e conteúdo separados"]
       ]
     },
-
     {
       "type": "heading",
       "level": 1,
-      "text": "6. Legenda de imagem"
+      "text": "6. Exemplo de imagem com legenda"
     },
     {
       "type": "paragraph",
       "style": "body",
       "run_style": "body",
-      "text": "Abaixo está um exemplo de legenda. Mesmo sem inserir uma imagem real agora, o bloco já fica definido para uso futuro."
+      "text": "Abaixo está um exemplo de imagem centralizada com legenda automática."
     },
     {
-      "type": "image_caption",
-      "text": "Figura 1 - Exemplo de legenda para imagem"
+      "type": "image",
+      "path": "imagem.png",
+      "width_cm": 8,
+      "caption": "Figura 1 - Exemplo de placeholder de imagem"
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -179,7 +171,6 @@
     {
       "type": "section_divider"
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -193,7 +184,6 @@
         { "text": "este é um exemplo de observação com destaque no início do parágrafo." }
       ]
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -208,7 +198,6 @@
     {
       "type": "page_break"
     },
-
     {
       "type": "heading",
       "level": 1,
@@ -220,7 +209,7 @@
       "runs": [
         { "text": "Este payload serve como " },
         { "text": "modelo de referência", "style": "bold" },
-        { "text": " para testar a nova estrutura de estilos com separação entre parágrafo e run." }
+        { "text": " para testar a nova estrutura de estilos com separação entre parágrafo e run, além do novo bloco único de imagem." }
       ]
     }
   ]

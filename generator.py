@@ -1,14 +1,18 @@
+from docx import Document
 
-def validar_arquivos():
-    if not TEMPLATE_FILE.exists():
-        raise FileNotFoundError(
-            f"Template não encontrado: '{TEMPLATE_FILE}'"
-        )
+from blocks import render_block, apply_paragraph_format, add_text_with_style
+from pathlib import Path
+from docx.shared import Cm
 
-    if not JSON_FILE.exists():
-        raise FileNotFoundError(
-            f"JSON não encontrado: '{JSON_FILE}'"
-        )
+COVER_SPACER_LINES = 8
+COVER_IMAGE_WIDTH_CM = 10
+
+def validar_arquivos(template_file, json_file):
+    if not template_file.exists():
+        raise FileNotFoundError(f"Template não encontrado: '{template_file}'")
+
+    if not json_file.exists():
+        raise FileNotFoundError(f"JSON não encontrado: '{json_file}'")
 
 
 def limpar_paragrafos(doc):
@@ -16,61 +20,58 @@ def limpar_paragrafos(doc):
         p = doc.paragraphs[0]._element
         p.getparent().remove(p)
 
-def gerar_capa(doc, meta):
-    document_type = meta.get("document_type", "")
+
+def add_cover_line(doc, text, paragraph_style, run_style):
+    p = doc.add_paragraph()
+    apply_paragraph_format(p, paragraph_style)
+    add_text_with_style(p, text, run_style)
+    return p
+
+
+def add_cover_spacing(doc, lines=COVER_SPACER_LINES):
+    for _ in range(lines):
+        doc.add_paragraph()
+
+def add_cover_image(doc, image_path, width_cm=COVER_IMAGE_WIDTH_CM):
+    if not image_path or not Path(image_path).exists():
+        raise FileNotFoundError(f"Imagem da capa não encontrada: '{image_path}'")
+
+    p = doc.add_paragraph()
+    apply_paragraph_format(p, "image")
+
+    run = p.add_run()
+    run.add_picture(str(image_path), width=Cm(width_cm))
+
+
+def gerar_capa(doc, meta, placeholder_image=None):
+    document_type = meta.get("document_type", "").upper()
     item_name = meta.get("item_name", "")
     document_code = meta.get("document_code", "")
     revision = meta.get("revision", "")
     date = meta.get("date", "")
 
-    p = doc.add_paragraph()
-    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-    r = p.add_run(document_type.upper())
-    r.font.name = "Corbel"
-    r.font.size = Pt(22)
-    r.bold = True
+    cover_image_path = meta.get("cover_image_path") or placeholder_image
 
-    p = doc.add_paragraph()
-    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-    r = p.add_run(item_name)
-    r.font.name = "Corbel"
-    r.font.size = Pt(18)
+    add_cover_line(doc, document_type, "cover_document_type", "cover_document_type")
+    add_cover_line(doc, item_name, "cover_item_name", "cover_item_name")
 
-    for _ in range(8):
-        doc.add_paragraph()
+    add_cover_spacing(doc, lines=2)
+    add_cover_image(doc, cover_image_path)
+    add_cover_spacing(doc, lines=2)
 
-    p = doc.add_paragraph()
-    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-    r = p.add_run(f"Código: {document_code}")
-    r.font.name = "Corbel"
-    r.font.size = Pt(12)
-
-    p = doc.add_paragraph()
-    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-    r = p.add_run(f"Data: {date}")
-    r.font.name = "Corbel"
-    r.font.size = Pt(12)
-
-    p = doc.add_paragraph()
-    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-    r = p.add_run(f"Versão: {revision}")
-    r.font.name = "Corbel"
-    r.font.size = Pt(12)
+    add_cover_line(doc, f"Código: {document_code}", "cover_meta", "cover_meta")
+    add_cover_line(doc, f"Data: {date}", "cover_meta", "cover_meta")
+    add_cover_line(doc, f"Versão: {revision}", "cover_meta", "cover_meta")
 
     doc.add_page_break()
 
-
-def gerar_documento():
-    validar_arquivos()
-
-    doc = Document(str(TEMPLATE_FILE))
+def gerar_documento(dados_json, template_file, output_file, placeholder_image=None):
+    doc = Document(str(template_file))
     limpar_paragrafos(doc)
 
-    gerar_capa(doc, dados_json["meta"])
+    gerar_capa(doc, dados_json["meta"], placeholder_image=placeholder_image)
 
     for block in dados_json["blocks"]:
-        render_block(doc, block)
+        render_block(doc, block, placeholder_image=placeholder_image)
 
-    doc.save(str(OUTPUT_FILE))
-    print(f"Documento gerado com sucesso: {OUTPUT_FILE}")
-    files.download(str(OUTPUT_FILE))
+    doc.save(str(output_file))
