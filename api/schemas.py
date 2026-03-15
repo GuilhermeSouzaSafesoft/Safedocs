@@ -45,3 +45,12 @@ class ActionFile(BaseModel):
 
 class ActionResponse(BaseModel):
     openaiFileResponse: List[ActionFile]
+
+
+class RootResponse(BaseModel):
+    status: str
+    message: str
+
+
+class HealthResponse(BaseModel):
+    status: str

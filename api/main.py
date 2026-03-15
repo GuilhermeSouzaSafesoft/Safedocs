@@ -3,7 +3,13 @@ import base64
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
-from api.schemas import ActionResponse, DocumentSchema, ActionFile
+from api.schemas import (
+    ActionResponse,
+    ActionFile,
+    DocumentSchema,
+    HealthResponse,
+    RootResponse,
+)
 from api.services import generate_docx_from_payload
 from safedocs.models import InvalidDocumentError
 
@@ -16,14 +22,14 @@ app = FastAPI(
 )
 
 
-@app.get("/")
-def root() -> dict[str, str]:
-    return {"status": "ok", "message": "Safedocs API pronta para gerar DOCX"}
+@app.get("/", response_model=RootResponse)
+def root() -> RootResponse:
+    return RootResponse(status="ok", message="Safedocs API pronta para gerar DOCX")
 
 
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "healthy"}
+@app.get("/health", response_model=HealthResponse)
+def health() -> HealthResponse:
+    return HealthResponse(status="healthy")
 
 
 @app.post("/generate-docx")
