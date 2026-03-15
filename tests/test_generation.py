@@ -1,9 +1,9 @@
 from pathlib import Path
 import json
 
-from safedocs.config import BASE_DIR, DATA_DIR, OUTPUT_DIR, TEMPLATE_FILE
-from safedocs.generator import gerar_documento
-from safedocs.models import DocumentData, load_document_data
+from gerador.config import BASE_DIR, DATA_DIR, OUTPUT_DIR, TEMPLATE_FILE
+from gerador.generator import gerar_documento
+from gerador.models import DocumentData, load_document_data
 
 
 def test_generate_document_from_sample_json(tmp_path: Path) -> None:

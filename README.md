@@ -49,6 +49,45 @@ python -m safedocs.cli \
 
 A saída final sempre será escrita dentro do diretório especificado em `--output`; o nome do arquivo é gerado automaticamente como `codigo-tipo_do_documento.docx`, usando os campos `codigo` e `tipo_do_documento` do JSON (`data` e `revisao` continuam sendo usados apenas na capa).
 
+#### API FastAPI
+
+Após instalar as dependências (`pip install -r requirements.txt`), suba a API com:
+
+```bash
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Endpoints importantes:
+
+- `GET /` – sanity-check simples.  
+- `GET /health` – health check.  
+- `POST /generate-docx` – recebe o JSON (mesma estrutura exibida acima) e retorna o `.docx` como download.
+
+A documentação interativa está disponível em `http://localhost:8000/docs`. Use o payload de exemplo disponível no Swagger UI ou copie este abaixo:
+
+```json
+{
+  "meta": {
+    "tipo_do_documento": "Guia rápido",
+    "nome_do_item": "Produto Exemplo",
+    "codigo": "EX-API-0001",
+    "revisao": "A",
+    "data": "2026-03-15"
+  },
+  "blocks": [
+    { "type": "secao", "text": "Seção inicial" },
+    { "type": "paragrafo", "text": "Texto enviado via API." }
+  ]
+}
+```
+
+#### Deploy no Render
+
+- **Build Command:** `pip install -r requirements.txt`
+- **Start Command:** `uvicorn api.main:app --host 0.0.0.0 --port $PORT`
+
+O Render já irá executar `uvicorn` diretamente, então certifique-se de apontar para `api.main:app`. O `output/` pode ser limpo entre builds, mas o endpoint escreve o DOCX sempre que uma requisição válida chega.
+
 #### Formato do JSON
 
 O JSON deve conter dois campos principais:
