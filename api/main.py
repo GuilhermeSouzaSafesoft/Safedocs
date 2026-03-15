@@ -1,7 +1,9 @@
+import base64
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
-from api.schemas import DocumentSchema
+from api.schemas import ActionResponse, DocumentSchema, ActionFile
 from api.services import generate_docx_from_payload
 from safedocs.models import InvalidDocumentError
 
@@ -31,3 +33,21 @@ def generate_docx(payload: DocumentSchema) -> FileResponse:
         filename=doc_path.name,
         headers={"Content-Disposition": f'attachment; filename="{doc_path.name}"'},
     )
+
+
+@app.post("/generate-docx-action", response_model=ActionResponse)
+def generate_docx_action(payload: DocumentSchema) -> ActionResponse:
+    try:
+        doc_path = generate_docx_from_payload(payload.dict())
+    except InvalidDocumentError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    with doc_path.open("rb") as f:
+        encoded = base64.b64encode(f.read()).decode("ascii")
+
+    action_file = ActionFile(
+        name=doc_path.name,
+        content=encoded,
+    )
+
+    return ActionResponse(openaiFileResponse=[action_file])

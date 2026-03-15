@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class MetaSchema(BaseModel):
@@ -33,3 +33,15 @@ class DocumentSchema(BaseModel):
                 ],
             }
         }
+
+
+class ActionFile(BaseModel):
+    name: str
+    content: str
+    mime_type: str = Field(
+        default="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+
+
+class ActionResponse(BaseModel):
+    openaiFileResponse: List[ActionFile]
