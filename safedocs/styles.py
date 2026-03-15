@@ -19,11 +19,6 @@ PARAGRAPH_STYLES = {
         "space_before": 0,
         "space_after": 6,
     },
-    "title": {
-        "align": "center",
-        "space_before": 0,
-        "space_after": 12,
-    },
     "heading_1": {
         "align": "left",
         "space_before": 12,
@@ -85,7 +80,7 @@ PARAGRAPH_STYLES = {
 RUN_STYLES = {
     "cover_document_type": {
         "font_name": "Corbel",
-        "font_size": 22,
+        "font_size": 28,
         "bold": True,
         "italic": False,
         "color": BLUE_HEX,
@@ -103,13 +98,6 @@ RUN_STYLES = {
         "bold": False,
         "italic": False,
         "color": BLACK_HEX,
-    },
-    "title": {
-        "font_name": "Corbel",
-        "font_size": 28,
-        "bold": True,
-        "italic": False,
-        "color": BLUE_HEX,
     },
     "heading_1": {
         "font_name": "Corbel",

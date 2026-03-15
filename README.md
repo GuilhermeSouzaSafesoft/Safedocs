@@ -85,7 +85,7 @@ Exemplo mínimo:
 
 - `title`
   - Campos: `text` (str).
-  - Renderiza um título centralizado com estilo `title`.
+  - Renderiza um título centralizado usando o estilo `cover_document_type`.
 
 - `paragraph`
   - Campos:
@@ -119,9 +119,6 @@ Exemplo mínimo:
     - `width_cm` (opcional, número) – largura em cm (padrão: 8).
     - `caption` (opcional, str) – legenda abaixo da imagem.
   - Se a imagem não existir, é usado o placeholder (se configurado) ou é renderizada a mensagem `[Imagem não encontrada]`.
-
-- `section_divider`
-  - Renderiza um divisor visual (linha horizontal).
 
 - `page_break`
   - Insere uma quebra de página.

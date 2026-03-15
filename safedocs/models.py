@@ -10,7 +10,6 @@ class BlockType(str, Enum):
     TITLE = "title"
     PARAGRAPH = "paragraph"
     HEADING = "heading"
-    SECTION_DIVIDER = "section_divider"
     BULLETS = "bullets"
     NUMBERED = "numbered"
     TABLE = "table"

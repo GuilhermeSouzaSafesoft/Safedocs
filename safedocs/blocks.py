@@ -74,8 +74,6 @@ def render_heading(doc: Document, block: Mapping[str, Any]) -> None:
 
     if level <= 1:
         style_key = "heading_1"
-        # Sempre separar visualmente se for heading de nível 1
-        render_section_divider(doc)
     elif level == 2:
         style_key = "heading_2"
     elif level == 3:
@@ -178,20 +176,14 @@ def render_image(doc: Document, block: Mapping[str, Any], placeholder_image: Pat
         render_image_caption(doc, caption)
 
 
-def render_section_divider(doc: Document) -> None:
-    p = doc.add_paragraph()
-    apply_paragraph_format(p, "body")
-    add_text_with_style(p, "─" * 50, "blue")
-    p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-
 
 def render_block(doc: Document, block: Dict[str, Any], placeholder_image: Path | str | None = None) -> None:
     block_type = block.get("type")
 
     if block_type == "title":
         title_block = dict(block)
-        title_block["style"] = "title"
-        title_block["run_style"] = "title"
+        title_block["style"] = "cover_document_type"
+        title_block["run_style"] = "cover_document_type"
         render_paragraph(doc, title_block)
 
     elif block_type == "paragraph":
@@ -199,9 +191,6 @@ def render_block(doc: Document, block: Dict[str, Any], placeholder_image: Path |
 
     elif block_type == "heading":
         render_heading(doc, block)
-
-    elif block_type == "section_divider":
-        render_section_divider(doc)
 
     elif block_type == "bullets":
         render_bullets(doc, block)

@@ -1,45 +1,36 @@
 {
   "meta": {
-    "document_type": "Documento Completo",
-    "item_name": "Exemplo com todos os blocos",
-    "document_code": "DOC-ALL-001",
+    "document_type": "Documento de Demonstração",
+    "item_name": "Safedocs - Todos os blocos",
+    "document_code": "DOC-DEMO-001",
     "revision": "A",
     "date": "2026-03-15",
-    "cover_image_path": "templates/imagem_inexistente.png"
+    "cover_image_path": "templates/imagem.png"
   },
   "blocks": [
     {
-      "type": "title",
-      "text": "Exemplo completo de documento"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "text": "Este documento demonstra todos os tipos de blocos disponíveis no Safedocs."
-    },
-    {
       "type": "heading",
       "level": 1,
-      "text": "1. Parágrafos"
+      "text": "1. Visão geral dos blocos"
     },
     {
       "type": "paragraph",
       "style": "body",
-      "text": "Parágrafo simples usando apenas o estilo de parágrafo padrão."
+      "text": "Este documento mostra como cada bloco disponível é renderizado a partir de um JSON."
     },
     {
       "type": "paragraph",
       "style": "body",
       "runs": [
-        { "text": "Parágrafo com " },
-        { "text": "negrito azul", "style": "bold" },
+        { "text": "Você pode combinar " },
+        { "text": "texto em negrito azul", "style": "bold" },
         { "text": ", " },
-        { "text": "texto azul", "style": "blue" },
+        { "text": "texto azul padrão", "style": "blue" },
         { "text": ", " },
         { "text": "itálico", "style": "italic" },
         { "text": " e " },
         { "text": "itálico azul", "style": "blue_italic" },
-        { "text": "." }
+        { "text": " dentro de um mesmo parágrafo." }
       ]
     },
     {
@@ -49,103 +40,66 @@
     },
     {
       "type": "heading",
-      "level": 1,
-      "text": "2.1 Heading nível 1"
-    },
-    {
-      "type": "heading",
       "level": 2,
-      "text": "2.2 Heading nível 2"
+      "text": "2.1 Heading nível 2"
     },
     {
       "type": "heading",
       "level": 3,
-      "text": "2.3 Heading nível 3"
+      "text": "2.2 Heading nível 3"
     },
     {
       "type": "heading",
       "level": 4,
-      "text": "2.4 Heading nível 4"
+      "text": "2.3 Heading nível 4"
     },
     {
       "type": "heading",
       "level": 1,
-      "text": "3. Listas com marcadores e numeradas"
+      "text": "3. Listas e tabelas"
+    },
+    {
+      "type": "paragraph",
+      "text": "A seguir exibimos exemplos de listas com marcadores e numeradas."
     },
     {
       "type": "bullets",
       "items": [
-        "Item com marcador 1",
-        "Item com marcador 2",
-        "Item com marcador 3"
+        "Marcador A",
+        "Marcador B",
+        "Marcador C"
       ]
     },
     {
       "type": "numbered",
       "items": [
-        "Item numerado 1",
-        "Item numerado 2",
-        "Item numerado 3"
+        "Primeira etapa",
+        "Segunda etapa",
+        "Terceira etapa"
       ]
     },
     {
       "type": "heading",
       "level": 1,
-      "text": "4. Tabela"
+      "text": "4. Tabela e imagem"
+    },
+    {
+      "type": "paragraph",
+      "text": "A tabela descreve três colunas e a imagem abaixo usa o placeholder configurado."
     },
     {
       "type": "table",
-      "columns": ["Coluna 1", "Coluna 2", "Coluna 3"],
+      "columns": ["Coluna A", "Coluna B", "Coluna C"],
       "rows": [
-        ["Linha 1 - A", "Linha 1 - B", "Linha 1 - C"],
-        ["Linha 2 - A", "Linha 2 - B", "Linha 2 - C"],
-        ["Linha 3 - A", "Linha 3 - B", "Linha 3 - C"]
+        ["Valor 1A", "Valor 1B", "Valor 1C"],
+        ["Valor 2A", "Valor 2B", "Valor 2C"],
+        ["Valor 3A", "Valor 3B", "Valor 3C"]
       ]
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "5. Imagens"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "text": "A imagem abaixo usa um caminho inválido e deve cair automaticamente para o placeholder."
-    },
-    {
       "type": "image",
-      "path": "templates/imagem_inexistente.png",
-      "caption": "Figura 1 - Placeholder usado quando a imagem não existe"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "text": "A imagem abaixo usa o placeholder diretamente."
-    },
-    {
-      "type": "image",
-      "path": "",
-      "caption": "Figura 2 - Placeholder configurado como imagem padrão"
-    },
-    {
-      "type": "heading",
-      "level": 1,
-      "text": "6. Divisor de seção (acoplado ao heading 1)"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "text": "Cada heading de nível 1 já desenha um divisor de seção automaticamente."
-    },
-    {
-      "type": "heading",
-      "level": 1,
-      "text": "7. Quebra de página"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "text": "O próximo bloco força uma quebra de página."
+      "path": "templates/imagem.png",
+      "caption": "Figura 1 - Imagem de placeholder usada como exemplo"
     },
     {
       "type": "page_break"
@@ -153,13 +107,11 @@
     {
       "type": "heading",
       "level": 1,
-      "text": "8. Seção final após quebra de página"
+      "text": "5. Encerramento"
     },
     {
       "type": "paragraph",
-      "style": "body",
-      "text": "Este é o parágrafo final do documento completo."
+      "text": "Depois da quebra de página, mantemos o padrão de blocos e encerramos o documento."
     }
   ]
 }
-
