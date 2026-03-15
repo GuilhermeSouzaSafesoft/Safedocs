@@ -1,0 +1,4 @@
+"""
+Pacote principal do Safedocs.
+"""
+

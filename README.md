@@ -1,0 +1,136 @@
+### Safedocs
+
+Ferramenta para gerar documentos DOCX a partir de arquivos JSON usando o template técnico da Safesoft.
+
+#### Instalação
+
+- **Pré-requisitos**: Python 3.10+ e `pip` instalados.
+- Instale as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+#### Estrutura principal
+
+- `safedocs/` – código da aplicação
+  - `main.py` – ponto de entrada simples (usa caminhos padrão do `config.py`).
+  - `cli.py` – interface de linha de comando configurável.
+  - `config.py` – caminhos padrão para JSON, template, saída e imagem placeholder.
+  - `generator.py` – orquestra a geração do documento.
+  - `cover.py` – geração da capa a partir de `meta`.
+  - `blocks.py` – renderização de blocos (`paragraph`, `heading`, `table`, `image`, etc.).
+  - `styles.py` – definição de estilos de parágrafo e de texto.
+  - `models.py` – modelos tipados (`Meta`, `Block`, `DocumentData`) e validação do JSON.
+  - `utils.py` – utilitários (cores, tabelas).
+- `data/` – arquivos JSON de entrada (ex.: `dados_json.json`).
+- `templates/` – `template.docx` e `imagem.png` (placeholder da capa/imagens).
+- `output/` – documentos gerados.
+- `examples/` – exemplos de JSON (ex.: `simple_paragraph.json`).
+- `tests/` – testes automatizados.
+
+#### Como rodar
+
+Usando os caminhos padrão definidos em `config.py`:
+
+```bash
+python -m safedocs.main
+```
+
+Ou usando a CLI com parâmetros customizados:
+
+```bash
+python -m safedocs.cli \
+  --json data/dados_json.json \
+  --template templates/template.docx \
+  --output output/documento_final.docx \
+  --placeholder-image templates/imagem.png
+```
+
+#### Formato do JSON
+
+O JSON deve conter dois campos principais:
+
+- `meta`: metadados usados na capa.
+- `blocks`: lista ordenada de blocos de conteúdo.
+
+Exemplo mínimo:
+
+```json
+{
+  "meta": {
+    "document_type": "Exemplo simples",
+    "item_name": "Documento mínimo",
+    "document_code": "EX-0001",
+    "revision": "A",
+    "date": "2026-03-15"
+  },
+  "blocks": [
+    { "type": "title", "text": "Exemplo mínimo de documento" },
+    { "type": "paragraph", "style": "body", "text": "Parágrafo de exemplo." }
+  ]
+}
+```
+
+##### Campo `meta`
+
+- `document_type` (str) – tipo de documento (ex.: "Manual de Instrução").
+- `item_name` (str) – nome do item / produto.
+- `document_code` (str) – código do documento.
+- `revision` (str) – revisão/versão.
+- `date` (str) – data em formato livre (ex.: `2026-03-13`).
+- `cover_image_path` (opcional, str) – caminho da imagem da capa; se omitido, usa o placeholder padrão.
+
+##### Tipos de blocos suportados (`blocks[*].type`)
+
+- `title`
+  - Campos: `text` (str).
+  - Renderiza um título centralizado com estilo `title`.
+
+- `paragraph`
+  - Campos:
+    - `style` (opcional, str) – estilo de parágrafo (padrão `body`).
+    - `run_style` (opcional, str) – estilo padrão do texto se não houver `runs`.
+    - `text` (opcional, str) – texto simples.
+    - `runs` (opcional, lista) – lista de segmentos com estilos específicos:
+      - Cada item: `{ "text": "...", "style": "bold" | "blue" | "italic" | "blue_italic" | ... }`.
+
+- `heading`
+  - Campos:
+    - `level` (int) – 1 a 4 (mapeado para `heading_1` a `heading_4`).
+    - `text` (str).
+
+- `bullets`
+  - Campos:
+    - `items` (lista de strings) – itens da lista com marcador.
+
+- `numbered`
+  - Campos:
+    - `items` (lista de strings) – itens da lista numerada.
+
+- `table`
+  - Campos:
+    - `columns` (lista de strings) – cabeçalhos.
+    - `rows` (lista de listas) – cada sublista é uma linha da tabela.
+
+- `image`
+  - Campos:
+    - `path` (str) – caminho da imagem.
+    - `width_cm` (opcional, número) – largura em cm (padrão: 8).
+    - `caption` (opcional, str) – legenda abaixo da imagem.
+  - Se a imagem não existir, é usado o placeholder (se configurado) ou é renderizada a mensagem `[Imagem não encontrada]`.
+
+- `section_divider`
+  - Renderiza um divisor visual (linha horizontal).
+
+- `page_break`
+  - Insere uma quebra de página.
+
+#### Testes
+
+Para rodar os testes (requer `pytest` instalado):
+
+```bash
+pytest
+```
+

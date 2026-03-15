@@ -1,13 +1,19 @@
+from typing import Any, Dict, Iterable, List, Mapping, Sequence
+
 from pathlib import Path
 
-from docx.shared import Pt, Cm
+from docx.document import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.shared import Cm, Pt
+from docx.table import _Cell, Table
+from docx.text.paragraph import Paragraph
+from docx.text.run import Run
 
-from styles import PARAGRAPH_STYLES, RUN_STYLES, BLUE_HEX
-from utils import hex_to_rgb, set_cell_shading
+from .styles import BLUE_HEX, PARAGRAPH_STYLES, RUN_STYLES
+from .utils import hex_to_rgb, set_cell_shading
 
 
-def apply_run_style(run, style_name="body"):
+def apply_run_style(run: Run, style_name: str = "body") -> None:
     style = RUN_STYLES.get(style_name, RUN_STYLES["body"])
 
     run.font.name = style["font_name"]
@@ -17,7 +23,7 @@ def apply_run_style(run, style_name="body"):
     run.font.color.rgb = hex_to_rgb(style["color"])
 
 
-def apply_paragraph_format(paragraph, style_name="body"):
+def apply_paragraph_format(paragraph: Paragraph, style_name: str = "body") -> None:
     style = PARAGRAPH_STYLES.get(style_name, PARAGRAPH_STYLES["body"])
     align = style.get("align", "left")
 
@@ -35,13 +41,13 @@ def apply_paragraph_format(paragraph, style_name="body"):
     pf.space_after = Pt(style.get("space_after", 0))
 
 
-def add_text_with_style(paragraph, text, style_name="body"):
+def add_text_with_style(paragraph: Paragraph, text: str, style_name: str = "body") -> Run:
     run = paragraph.add_run(text)
     apply_run_style(run, style_name)
     return run
 
 
-def render_paragraph(doc, block):
+def render_paragraph(doc: Document, block: Mapping[str, Any]) -> None:
     p = doc.add_paragraph()
 
     paragraph_style_name = block.get("style", "body")
@@ -62,12 +68,14 @@ def render_paragraph(doc, block):
         add_text_with_style(p, text, run_style_name)
 
 
-def render_heading(doc, block):
+def render_heading(doc: Document, block: Mapping[str, Any]) -> None:
     level = int(block.get("level", 1))
     text = block.get("text", "")
 
     if level <= 1:
         style_key = "heading_1"
+        # Sempre separar visualmente se for heading de nível 1
+        render_section_divider(doc)
     elif level == 2:
         style_key = "heading_2"
     elif level == 3:
@@ -80,8 +88,8 @@ def render_heading(doc, block):
     add_text_with_style(p, text, style_key)
 
 
-def render_bullets(doc, block):
-    items = block.get("items", [])
+def render_bullets(doc: Document, block: Mapping[str, Any]) -> None:
+    items: Iterable[Any] = block.get("items", [])
 
     for item in items:
         p = doc.add_paragraph()
@@ -90,8 +98,8 @@ def render_bullets(doc, block):
         add_text_with_style(p, str(item), "bullet")
 
 
-def render_numbered(doc, block):
-    items = block.get("items", [])
+def render_numbered(doc: Document, block: Mapping[str, Any]) -> None:
+    items: Sequence[Any] = block.get("items", [])
 
     for index, item in enumerate(items, start=1):
         p = doc.add_paragraph()
@@ -100,9 +108,9 @@ def render_numbered(doc, block):
         add_text_with_style(p, str(item), "number")
 
 
-def render_table(doc, block):
-    cols = block.get("columns", [])
-    rows = block.get("rows", [])
+def render_table(doc: Document, block: Mapping[str, Any]) -> None:
+    cols: List[str] = list(block.get("columns", []))
+    rows: List[Sequence[Any]] = list(block.get("rows", []))
 
     if not cols:
         p = doc.add_paragraph()
@@ -110,7 +118,7 @@ def render_table(doc, block):
         add_text_with_style(p, "[Tabela ignorada: sem colunas]", "body")
         return
 
-    table = doc.add_table(rows=1, cols=len(cols))
+    table: Table = doc.add_table(rows=1, cols=len(cols))
     table.style = "Table Grid"
 
     header_cells = table.rows[0].cells
@@ -132,22 +140,23 @@ def render_table(doc, block):
             add_text_with_style(p, value, "table_cell")
 
 
-def render_image_caption(doc, text):
+def render_image_caption(doc: Document, text: str) -> None:
     p = doc.add_paragraph()
     apply_paragraph_format(p, "caption")
     add_text_with_style(p, text, "caption")
 
 
-def render_image(doc, block, placeholder_image=None):
-    image_path = block.get("path", "")
-    width_cm = block.get("width_cm", 8)
-    caption = block.get("caption", "")
+def render_image(doc: Document, block: Mapping[str, Any], placeholder_image: Path | str | None = None) -> None:
+    image_path = str(block.get("path", "") or "")
+    # Largura fixa para imagens de conteúdo
+    width_cm: float = 8.0
+    caption = str(block.get("caption", "") or "")
 
-    final_image_path = None
+    final_image_path: str | None = None
 
     if image_path and Path(image_path).exists():
         final_image_path = image_path
-    elif placeholder_image and Path(placeholder_image).exists():
+    elif placeholder_image and Path(str(placeholder_image)).exists():
         final_image_path = str(placeholder_image)
 
     if final_image_path is None:
@@ -169,14 +178,14 @@ def render_image(doc, block, placeholder_image=None):
         render_image_caption(doc, caption)
 
 
-def render_section_divider(doc):
+def render_section_divider(doc: Document) -> None:
     p = doc.add_paragraph()
     apply_paragraph_format(p, "body")
     add_text_with_style(p, "─" * 50, "blue")
     p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 
-def render_block(doc, block, placeholder_image=None):
+def render_block(doc: Document, block: Dict[str, Any], placeholder_image: Path | str | None = None) -> None:
     block_type = block.get("type")
 
     if block_type == "title":

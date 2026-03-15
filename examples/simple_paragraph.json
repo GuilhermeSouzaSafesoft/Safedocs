@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "document_type": "Exemplo simples",
+    "item_name": "Documento mínimo",
+    "document_code": "EX-0001",
+    "revision": "A",
+    "date": "2026-03-15"
+  },
+  "blocks": [
+    {
+      "type": "title",
+      "text": "Exemplo mínimo de documento"
+    },
+    {
+      "type": "paragraph",
+      "style": "body",
+      "text": "Este é um exemplo mínimo com apenas um título e um parágrafo."
+    }
+  ]
+}
+
