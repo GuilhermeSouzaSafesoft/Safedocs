@@ -35,7 +35,7 @@ def health() -> HealthResponse:
 @app.post("/generate-docx")
 def generate_docx(payload: DocumentSchema) -> FileResponse:
     try:
-        doc_path = generate_docx_from_payload(payload.dict())
+        doc_path = generate_docx_from_payload(payload.model_dump())
     except InvalidDocumentError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
@@ -50,7 +50,7 @@ def generate_docx(payload: DocumentSchema) -> FileResponse:
 @app.post("/generate-docx-action", response_model=ActionResponse)
 def generate_docx_action(payload: DocumentSchema) -> ActionResponse:
     try:
-        doc_path = generate_docx_from_payload(payload.dict())
+        doc_path = generate_docx_from_payload(payload.model_dump())
     except InvalidDocumentError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
