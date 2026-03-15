@@ -53,8 +53,9 @@ def render_paragraph(doc: Document, block: Mapping[str, Any]) -> None:
     paragraph_style_name = block.get("style", "body")
     apply_paragraph_format(p, paragraph_style_name)
 
-    if "runs" in block:
-        for item in block["runs"]:
+    runs = block.get("runs")
+    if runs:
+        for item in runs:
             text = item.get("text", "")
             run_style_name = item.get("style", "body")
             add_text_with_style(p, text, run_style_name)
@@ -77,7 +78,7 @@ def render_heading_block(doc: Document, block: Mapping[str, Any], style_key: str
 
 
 def render_bullets(doc: Document, block: Mapping[str, Any]) -> None:
-    items: Iterable[Any] = block.get("items", [])
+    items: Iterable[Any] = block.get("items") or []
 
     for item in items:
         p = doc.add_paragraph()
@@ -87,7 +88,7 @@ def render_bullets(doc: Document, block: Mapping[str, Any]) -> None:
 
 
 def render_numbered(doc: Document, block: Mapping[str, Any]) -> None:
-    items: Sequence[Any] = block.get("items", [])
+    items: Sequence[Any] = block.get("items") or []
 
     for index, item in enumerate(items, start=1):
         p = doc.add_paragraph()
@@ -97,8 +98,8 @@ def render_numbered(doc: Document, block: Mapping[str, Any]) -> None:
 
 
 def render_table(doc: Document, block: Mapping[str, Any]) -> None:
-    cols: List[str] = list(block.get("columns", []))
-    rows: List[Sequence[Any]] = list(block.get("rows", []))
+    cols: List[str] = list(block.get("columns") or [])
+    rows: List[Sequence[Any]] = list(block.get("rows") or [])
 
     if not cols:
         p = doc.add_paragraph()

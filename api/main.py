@@ -34,8 +34,8 @@ def health() -> HealthResponse:
 
 def _payload_to_dict(payload: DocumentSchema) -> dict:
     if hasattr(payload, "model_dump"):
-        return payload.model_dump()
-    return payload.dict()
+        return payload.model_dump(exclude_none=True)
+    return payload.dict(exclude_none=True)
 
 
 @app.post("/generate-docx")
