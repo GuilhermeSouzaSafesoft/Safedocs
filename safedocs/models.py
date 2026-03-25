@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 class BlockType(str, Enum):
@@ -50,6 +49,54 @@ def _ensure_key(data: Dict[str, Any], key: str) -> Any:
     return data[key]
 
 
+def _normalize_block_type(block_raw: Dict[str, Any], index: int) -> BlockType:
+    raw_type = str(block_raw.get("type", "")).strip().lower()
+    if not raw_type:
+        raise InvalidDocumentError(f"Bloco na posição {index} está sem o campo 'type'.")
+
+    aliases = {
+        "paragraph": BlockType.PARAGRAFO,
+        "paragrafo": BlockType.PARAGRAFO,
+        "heading": None,
+        "secao": BlockType.SECAO,
+        "subsecao": BlockType.SUBSECAO,
+        "subsubsecao": BlockType.SUBSUBSECAO,
+        "subsubsubsecao": BlockType.SUBSUBSUBSECAO,
+        "title": BlockType.SECAO,
+        "bullets": BlockType.LISTA,
+        "lista_com_marcadores": BlockType.LISTA,
+        "numbered": BlockType.LISTA_NUMERADA,
+        "lista_numerada": BlockType.LISTA_NUMERADA,
+        "table": BlockType.TABELA,
+        "tabela": BlockType.TABELA,
+        "image": BlockType.IMAGEM,
+        "imagem": BlockType.IMAGEM,
+        "page_break": BlockType.QUEBRA_DE_PAGINA,
+        "quebra_de_pagina": BlockType.QUEBRA_DE_PAGINA,
+    }
+
+    mapped = aliases.get(raw_type)
+    if mapped is not None:
+        return mapped
+
+    if raw_type == "heading":
+        level = block_raw.get("level", 1)
+        try:
+            level_int = int(level)
+        except (TypeError, ValueError):
+            raise InvalidDocumentError(f"Valor inválido de 'level' no bloco {index}: '{level}'.")
+
+        if level_int <= 1:
+            return BlockType.SECAO
+        if level_int == 2:
+            return BlockType.SUBSECAO
+        if level_int == 3:
+            return BlockType.SUBSUBSECAO
+        return BlockType.SUBSUBSUBSECAO
+
+    raise InvalidDocumentError(f"Tipo de bloco não suportado na posição {index}: '{raw_type}'.")
+
+
 def load_document_data(json_data: Dict[str, Any]) -> DocumentData:
     """
     Converte o dicionário carregado do JSON em um objeto DocumentData validado.
@@ -76,16 +123,8 @@ def load_document_data(json_data: Dict[str, Any]) -> DocumentData:
         if not isinstance(block_raw, dict):
             raise InvalidDocumentError(f"Bloco na posição {index} deve ser um objeto.")
 
-        block_type_value = block_raw.get("type")
-        if not block_type_value:
-            raise InvalidDocumentError(f"Bloco na posição {index} está sem o campo 'type'.")
-
-        try:
-            block_type = BlockType(block_type_value)
-        except ValueError:
-            raise InvalidDocumentError(f"Tipo de bloco não suportado na posição {index}: '{block_type_value}'.")
-
-        blocks.append(Block(type=block_type, raw=block_raw))
+        block_type = _normalize_block_type(block_raw, index)
+        normalized_raw = {**block_raw, "type": block_type.value}
+        blocks.append(Block(type=block_type, raw=normalized_raw))
 
     return DocumentData(meta=meta, blocks=blocks)
-

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -13,22 +13,13 @@ class MetaSchema(BaseModel):
     data: str
 
 
-class RunSchema(BaseModel):
-    text: str
-    style: str | None = None
-
-
 class BlockSchema(BaseModel):
     type: str
     text: str | None = None
-    style: str | None = None
-    run_style: str | None = None
-    runs: List[RunSchema] | None = None
-    items: List[Any] | None = None
+    level: int | None = None
+    items: List[str] | None = None
     columns: List[str] | None = None
-    rows: List[List[Any]] | None = None
-    path: str | None = None
-    caption: str | None = None
+    rows: List[List[str]] | None = None
 
     class Config:
         extra = "allow"
@@ -51,6 +42,11 @@ class DocumentSchema(BaseModel):
                 "blocks": [
                     {"type": "secao", "text": "Seção 1"},
                     {"type": "paragrafo", "text": "Texto de exemplo."},
+                    {
+                        "type": "tabela",
+                        "columns": ["Coluna A", "Coluna B"],
+                        "rows": [["Valor 1", "Valor 2"]],
+                    },
                 ],
             }
         }
