@@ -1,49 +1,19 @@
 {
   "meta": {
-    "document_type": "Manual de Instrução",
-    "item_name": "Cartão CR80 sem chip",
-    "document_code": "016.000.000.0001",
-    "revision": "A",
-    "date": "2026-03-13",
-    "cover_image_path": "imagem.png",
-    "cover_image_width_cm": 6
+    "tipo_do_documento": "Manual de Instrução",
+    "nome_do_item": "Cartão CR80 sem chip",
+    "codigo": "016.000.000.0001",
+    "revisao": "A",
+    "data": "2026-03-13"
   },
   "blocks": [
     {
-      "type": "title",
-      "text": "TÍTULO DO DOCUMENTO"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "run_style": "body",
-      "text": "Este documento contém exemplos visuais de formatação para servir como base de template."
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "runs": [
-        { "text": "Este parágrafo demonstra " },
-        { "text": "negrito", "style": "bold" },
-        { "text": ", " },
-        { "text": "texto azul", "style": "blue" },
-        { "text": ", " },
-        { "text": "itálico", "style": "italic" },
-        { "text": " e " },
-        { "text": "itálico azul", "style": "blue_italic" },
-        { "text": "." }
-      ]
-    },
-    {
-      "type": "heading",
-      "level": 1,
+      "type": "secao",
       "text": "1. Seção"
     },
     {
-      "type": "paragraph",
-      "style": "body",
-      "run_style": "body",
-      "text": "Exemplo de texto abaixo de uma seção."
+      "type": "paragrafo",
+      "text": "Este documento contém exemplos visuais de formatação para servir como base de template."
     },
     {
       "type": "heading",
@@ -51,59 +21,7 @@
       "text": "1.1 Subseção"
     },
     {
-      "type": "paragraph",
-      "style": "body",
-      "runs": [
-        { "text": "Neste exemplo, o " },
-        { "text": "texto em negrito", "style": "bold" },
-        { "text": " deve sempre ficar em azul." }
-      ]
-    },
-    {
-      "type": "heading",
-      "level": 3,
-      "text": "1.1.1 Subsubseção"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "runs": [
-        { "text": "Também é possível combinar estilos com " },
-        { "text": "destaques em azul", "style": "blue" },
-        { "text": " e " },
-        { "text": "ênfase em itálico", "style": "italic" },
-        { "text": "." }
-      ]
-    },
-    {
-      "type": "heading",
-      "level": 4,
-      "text": "1.1.1.1 Subsubsubseção"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "run_style": "body",
-      "text": "Exemplo de texto abaixo de uma subsubsubseção."
-    },
-    {
-      "type": "heading",
-      "level": 1,
-      "text": "2. Parágrafo com run_style diferente"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "run_style": "blue",
-      "text": "Este parágrafo inteiro usa run_style azul, sem precisar quebrar o texto em vários runs."
-    },
-    {
-      "type": "heading",
-      "level": 1,
-      "text": "3. Lista com marcadores"
-    },
-    {
-      "type": "bullets",
+      "type": "lista_com_marcadores",
       "items": [
         "Primeiro item com marcador",
         "Segundo item com marcador",
@@ -111,12 +29,7 @@
       ]
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "4. Lista enumerada"
-    },
-    {
-      "type": "numbered",
+      "type": "lista_numerada",
       "items": [
         "Primeiro item enumerado",
         "Segundo item enumerado",
@@ -124,93 +37,25 @@
       ]
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "5. Tabela"
-    },
-    {
-      "type": "table",
-      "columns": ["Elemento", "Tipo", "Exemplo de estilo", "Observação"],
+      "type": "tabela",
+      "columns": ["Elemento", "Tipo", "Observação"],
       "rows": [
-        ["Título", "Bloco especial", "title", "Usado no topo do documento"],
-        ["Parágrafo", "Bloco", "body + run_style", "Permite texto simples ou runs"],
-        ["Seção", "Heading", "heading_1", "Seção principal"],
-        ["Subseção", "Heading", "heading_2", "Subnível"],
-        ["Legenda", "Bloco", "caption", "Texto centralizado em itálico"],
-        ["Tabela", "Bloco", "table_header / table_cell", "Cabeçalho e conteúdo separados"]
+        ["Parágrafo", "Bloco", "Texto corrido"],
+        ["Seção", "Heading", "Hierarquia por level"],
+        ["Tabela", "Bloco", "Cabeçalho e linhas"]
       ]
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "6. Exemplo de imagem com legenda"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "run_style": "body",
-      "text": "Abaixo está um exemplo de imagem centralizada com legenda automática."
-    },
-    {
-      "type": "image",
-      "path": "imagem.png",
-      "width_cm": 8,
+      "type": "imagem",
+      "path": "templates/imagem.png",
       "caption": "Figura 1 - Exemplo de placeholder de imagem"
     },
     {
-      "type": "heading",
-      "level": 1,
-      "text": "7. Divisor de seção"
+      "type": "quebra_de_pagina"
     },
     {
-      "type": "paragraph",
-      "style": "body",
-      "run_style": "body",
-      "text": "O bloco abaixo demonstra um divisor visual simples."
-    },
-    {
-      "type": "section_divider"
-    },
-    {
-      "type": "heading",
-      "level": 1,
-      "text": "8. Observação"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "runs": [
-        { "text": "Observação: ", "style": "bold" },
-        { "text": "este é um exemplo de observação com destaque no início do parágrafo." }
-      ]
-    },
-    {
-      "type": "heading",
-      "level": 1,
-      "text": "9. Quebra de página"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "run_style": "body",
-      "text": "O próximo bloco força uma quebra de página."
-    },
-    {
-      "type": "page_break"
-    },
-    {
-      "type": "heading",
-      "level": 1,
-      "text": "10. Exemplo final"
-    },
-    {
-      "type": "paragraph",
-      "style": "body",
-      "runs": [
-        { "text": "Este payload serve como " },
-        { "text": "modelo de referência", "style": "bold" },
-        { "text": " para testar a nova estrutura de estilos com separação entre parágrafo e run, além do novo bloco único de imagem." }
-      ]
+      "type": "paragrafo",
+      "text": "Exemplo final após quebra de página."
     }
   ]
 }
