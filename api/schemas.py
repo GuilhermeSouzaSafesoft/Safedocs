@@ -64,6 +64,15 @@ class ActionResponse(BaseModel):
     openaiFileResponse: List[ActionFile]
 
 
+class PowerAutomateResponse(BaseModel):
+    success: bool = True
+    filename: str
+    mime_type: str = Field(
+        default="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    content_base64: str
+
+
 class RootResponse(BaseModel):
     status: str
     message: str
