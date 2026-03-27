@@ -4,10 +4,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
 from api.schemas import (
-    ActionFile,
-    ActionResponse,
     DocumentSchema,
     HealthResponse,
+    PowerAutomateResponse,
     RootResponse,
 )
 from api.services import generate_docx_from_payload
@@ -53,19 +52,20 @@ def generate_docx(payload: DocumentSchema) -> FileResponse:
     )
 
 
-@app.post("/generate-docx-action", response_model=ActionResponse)
-def generate_docx_action(payload: DocumentSchema) -> ActionResponse:
+@app.post("/generate-docx-action", response_model=PowerAutomateResponse)
+def generate_docx_action(payload: DocumentSchema) -> PowerAutomateResponse:
     try:
         doc_path = generate_docx_from_payload(_payload_to_dict(payload))
     except InvalidDocumentError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
+    except Exception:
+        raise HTTPException(status_code=500, detail="Erro interno ao gerar o DOCX.")
 
     with doc_path.open("rb") as f:
         encoded = base64.b64encode(f.read()).decode("ascii")
 
-    action_file = ActionFile(
-        name=doc_path.name,
-        content=encoded,
+    return PowerAutomateResponse(
+        success=True,
+        filename=doc_path.name,
+        content_base64=encoded,
     )
-
-    return ActionResponse(openaiFileResponse=[action_file])
