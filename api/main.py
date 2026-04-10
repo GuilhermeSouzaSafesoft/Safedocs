@@ -1,13 +1,15 @@
 import base64
+from io import BytesIO
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
+from docx import Document
 
 from api.schemas import (
-    ActionFile,
-    ActionResponse,
+    AppendHistoryTableRequest,
     DocumentSchema,
     HealthResponse,
+    PowerAutomateResponse,
     RootResponse,
 )
 from api.services import generate_docx_from_payload
@@ -53,19 +55,60 @@ def generate_docx(payload: DocumentSchema) -> FileResponse:
     )
 
 
-@app.post("/generate-docx-action", response_model=ActionResponse)
-def generate_docx_action(payload: DocumentSchema) -> ActionResponse:
+@app.post("/generate-docx-action", response_model=PowerAutomateResponse)
+def generate_docx_action(payload: DocumentSchema) -> PowerAutomateResponse:
     try:
         doc_path = generate_docx_from_payload(_payload_to_dict(payload))
     except InvalidDocumentError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
+    except Exception:
+        raise HTTPException(status_code=500, detail="Erro interno ao gerar o DOCX.")
 
     with doc_path.open("rb") as f:
         encoded = base64.b64encode(f.read()).decode("ascii")
 
-    action_file = ActionFile(
-        name=doc_path.name,
-        content=encoded,
+    return PowerAutomateResponse(
+        success=True,
+        filename=doc_path.name,
+        content_base64=encoded,
     )
 
-    return ActionResponse(openaiFileResponse=[action_file])
+
+@app.post("/append-history-table", response_model=PowerAutomateResponse)
+def append_history_table(payload: AppendHistoryTableRequest) -> PowerAutomateResponse:
+    try:
+        source_bytes = base64.b64decode(payload.content_base64)
+        document = Document(BytesIO(source_bytes))
+
+        document.add_paragraph()
+        document.add_heading("Histórico de Revisões", level=2)
+
+        table = document.add_table(rows=2, cols=3)
+        table.rows[0].cells[0].text = "Versão"
+        table.rows[0].cells[1].text = "Data"
+        table.rows[0].cells[2].text = "Autor"
+
+        table.rows[1].cells[0].text = payload.versao
+        table.rows[1].cells[1].text = payload.data
+        table.rows[1].cells[2].text = payload.autor
+
+        output = BytesIO()
+        document.save(output)
+        encoded = base64.b64encode(output.getvalue()).decode("ascii")
+
+        filename = payload.filename
+        if filename.lower().endswith(".docx"):
+            filename = f"{filename[:-5]}_modificado.docx"
+        else:
+            filename = f"{filename}_modificado.docx"
+
+        return PowerAutomateResponse(
+            success=True,
+            filename=filename,
+            content_base64=encoded,
+        )
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Erro interno ao adicionar tabela de histórico ao DOCX.",
+        )

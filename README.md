@@ -11,33 +11,13 @@ Ferramenta para gerar documentos DOCX a partir de arquivos JSON usando o templat
 pip install -r requirements.txt
 ```
 
-#### Estrutura principal
-
- - `safedocs/` – código da aplicação
-   - `main.py` – ponto de entrada simples (usa caminhos padrão do `config.py`).
-   - `cli.py` – interface de linha de comando configurável.
-   - `config.py` – caminhos padrão para JSON, template, saída e imagem placeholder.
-   - `generator.py` – orquestra a geração do documento.
-   - `cover.py` – geração da capa a partir de `meta`.
-   - `blocks.py` – renderização de blocos (`paragrafo`, `secao`, `tabela`, `imagem`, etc.).
-   - `styles.py` – definição de estilos de parágrafo e de texto.
-   - `models.py` – modelos tipados (`Meta`, `Block`, `DocumentData`) e validação do JSON.
-   - `utils.py` – utilitários (cores, tabelas).
-- `data/` – arquivos JSON de entrada (ex.: `dados_json.json`).
-- `templates/` – `template.docx` e `imagem.png` (placeholder da capa/imagens).
-- `output/` – documentos gerados.
-- `examples/` – exemplos de JSON (ex.: `simple_paragraph.json`).
-- `tests/` – testes automatizados.
-
 #### Como rodar
-
-Usando os caminhos padrão definidos em `config.py`:
 
 ```bash
 python -m safedocs.main
 ```
 
-Ou usando a CLI com parâmetros customizados:
+Ou com parâmetros customizados:
 
 ```bash
 python -m safedocs.cli \
@@ -47,23 +27,14 @@ python -m safedocs.cli \
   --placeholder-image templates/imagem.png
 ```
 
-A saída final sempre será escrita dentro do diretório especificado em `--output`; o nome do arquivo é gerado automaticamente como `codigo-tipo_do_documento.docx`, usando os campos `codigo` e `tipo_do_documento` do JSON (`data` e `revisao` continuam sendo usados apenas na capa).
+#### Formato do JSON (novo schema)
 
-#### API FastAPI
+O JSON deve conter dois campos principais:
 
-Após instalar as dependências (`pip install -r requirements.txt`), suba a API com:
+- `meta`: metadados da capa.
+- `blocks`: lista ordenada de blocos do conteúdo.
 
-```bash
-uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Endpoints importantes:
-
-- `GET /` – sanity-check simples.  
-- `GET /health` – health check.  
-- `POST /generate-docx` – recebe o JSON (mesma estrutura exibida acima) e retorna o `.docx` como download.
-
-A documentação interativa está disponível em `http://localhost:8000/docs`. Use o payload de exemplo disponível no Swagger UI ou copie este abaixo:
+Exemplo:
 
 ```json
 {
@@ -76,105 +47,53 @@ A documentação interativa está disponível em `http://localhost:8000/docs`. U
   },
   "blocks": [
     { "type": "secao", "text": "Seção inicial" },
-    { "type": "paragrafo", "text": "Texto enviado via API." }
+    { "type": "paragrafo", "text": "Texto enviado via API." },
+    { "type": "heading", "level": 2, "text": "Subseção via level" },
+    { "type": "lista_com_marcadores", "items": ["Item 1", "Item 2"] },
+    { "type": "tabela", "columns": ["A", "B"], "rows": [["1", "2"]] }
   ]
 }
 ```
 
-#### Deploy no Render
+##### `meta`
 
-- **Build Command:** `pip install -r requirements.txt`
-- **Start Command:** `uvicorn api.main:app --host 0.0.0.0 --port $PORT`
+- `tipo_do_documento` (string)
+- `nome_do_item` (string)
+- `codigo` (string)
+- `revisao` (string)
+- `data` (string)
 
-O Render já irá executar `uvicorn` diretamente, então certifique-se de apontar para `api.main:app`. O `output/` pode ser limpo entre builds, mas o endpoint escreve o DOCX sempre que uma requisição válida chega.
+##### `blocks[*]`
 
-#### Formato do JSON
+Campos aceitos pelo schema:
 
-O JSON deve conter dois campos principais:
+- `type` (string) **obrigatório**
+- `text` (string)
+- `level` (integer)
+- `items` (array de strings)
+- `columns` (array de strings)
+- `rows` (array de arrays de strings)
 
-- `meta`: metadados usados na capa.
-- `blocks`: lista ordenada de blocos de conteúdo.
+Tipos de bloco suportados pelo renderizador:
 
-Exemplo mínimo:
+- Português: `paragrafo`, `secao`, `subsecao`, `subsubsecao`, `subsubsubsecao`, `lista_com_marcadores`, `lista_numerada`, `tabela`, `imagem`, `quebra_de_pagina`.
+- Compatibilidade legada: `paragraph`, `heading` (usa `level`), `bullets`, `numbered`, `table`, `image`, `page_break`, `title`.
 
-```json
-{
-  "meta": {
-    "tipo_do_documento": "Exemplo simples",
-    "nome_do_item": "Documento mínimo",
-    "codigo": "EX-0001",
-    "revisao": "A",
-    "data": "2026-03-15"
-  },
-  "blocks": [
-    { "type": "paragrafo", "style": "body", "text": "Parágrafo de exemplo." }
-  ]
-}
+#### API FastAPI
+
+```bash
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-##### Campo `meta`
+Endpoints:
 
-- `tipo_do_documento` (str) – tipo de documento (ex.: "Manual de Instrução"). Esse valor vira o título centralizado da capa.
-- `nome_do_item` (str) – nome do item / produto.
-- `codigo` (str) – código do documento.
-- `revisao` (str) – revisão/versão.
-- `data` (str) – data em formato livre (ex.: `2026-03-13`).
-- A capa usa sempre o placeholder configurado (via `--placeholder-image` ou o default `templates/imagem.png`) em vez de um campo `cover_image_path`.
-
-##### Tipos de blocos suportados (`blocks[*].type`)
-
-- `paragrafo`
-  - Campos:
-    - `style` (opcional, str) – estilo de parágrafo (padrão `body`).
-    - `run_style` (opcional, str) – estilo padrão do texto se não houver `runs`.
-    - `text` (opcional, str) – texto simples.
-    - `runs` (opcional, lista) – lista de segmentos com estilos específicos:
-      - Cada item: `{ "text": "...", "style": "bold" | "blue" | "italic" | "blue_italic" | ... }`.
-
-- `secao`
-  - Campos:
-    - `text` (str) – texto da seção (usa o estilo `secao`).
-
-- `subsecao`
-  - Campos:
-    - `text` (str) – texto da subseção (usa o estilo `subsecao`).
-
-- `subsubsecao`
-  - Campos:
-    - `text` (str) – texto da subsubseção (usa o estilo `subsubsecao`).
-
-- `subsubsubsecao`
-  - Campos:
-    - `text` (str) – texto da subsubsubseção (usa o estilo `subsubsubsecao`).
-
-- `lista_com_marcadores`
-  - Campos:
-    - `items` (lista de strings) – itens da lista com marcador.
-
-- `lista_numerada`
-  - Campos:
-    - `items` (lista de strings) – itens da lista numerada.
-
-- `tabela`
-  - Campos:
-    - `columns` (lista de strings) – cabeçalhos.
-    - `rows` (lista de listas) – cada sublista é uma linha da tabela.
-
-- `imagem`
-  - Campos:
-    - `path` (str) – caminho da imagem.
-    - `width_cm` (opcional, número) – largura em cm (padrão: 8).
-    - `caption` (opcional, str) – legenda abaixo da imagem.
-  - Se a imagem não existir, o placeholder configurado é usado automaticamente (sem exibir `[Imagem não encontrada]` quando o placeholder estiver disponível).
-
-- `quebra_de_pagina`
-  - Insere uma quebra de página.
+- `GET /`
+- `GET /health`
+- `POST /generate-docx`
+- `POST /generate-docx-action`
 
 #### Testes
-
-Para rodar os testes (requer `pytest` instalado):
 
 ```bash
 pytest
 ```
-
