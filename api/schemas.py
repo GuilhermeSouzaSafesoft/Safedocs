@@ -73,11 +73,15 @@ class PowerAutomateResponse(BaseModel):
     content_base64: str
 
 
-class AppendHistoryTableRequest(BaseModel):
-    content_base64: str
+class HistoricoItemSchema(BaseModel):
     versao: str
     data: str
     autor: str
+
+
+class AppendHistoryTableRequest(BaseModel):
+    content_base64: str
+    historico: List[HistoricoItemSchema]
     filename: str | None = None
 
 

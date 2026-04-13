@@ -15,6 +15,7 @@ from api.schemas import (
     RootResponse,
 )
 from api.services import generate_docx_from_payload
+from safedocs.blocks import render_block
 from safedocs.models import InvalidDocumentError
 
 app = FastAPI(
@@ -106,14 +107,15 @@ def append_history_table(payload: AppendHistoryTableRequest) -> PowerAutomateRes
         document.add_paragraph()
         document.add_paragraph("Histórico de Revisões")
 
-        table = document.add_table(rows=2, cols=3)
-        table.rows[0].cells[0].text = "Versão"
-        table.rows[0].cells[1].text = "Data"
-        table.rows[0].cells[2].text = "Autor"
-
-        table.rows[1].cells[0].text = str(payload.versao)
-        table.rows[1].cells[1].text = str(payload.data)
-        table.rows[1].cells[2].text = str(payload.autor)
+        historico_block = {
+            "type": "tabela",
+            "columns": ["Versão", "Data", "Autor"],
+            "rows": [
+                [str(item.versao), str(item.data), str(item.autor)]
+                for item in payload.historico
+            ],
+        }
+        render_block(document, historico_block)
 
         output = BytesIO()
         document.save(output)
