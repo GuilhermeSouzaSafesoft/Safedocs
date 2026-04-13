@@ -73,6 +73,14 @@ class PowerAutomateResponse(BaseModel):
     content_base64: str
 
 
+class AppendHistoryTableRequest(BaseModel):
+    content_base64: str
+    versao: str
+    data: str
+    autor: str
+    filename: str | None = None
+
+
 class RootResponse(BaseModel):
     status: str
     message: str
