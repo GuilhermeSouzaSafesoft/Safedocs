@@ -104,7 +104,7 @@ def append_history_table(payload: AppendHistoryTableRequest) -> PowerAutomateRes
             raise ValueError(f"Erro ao abrir DOCX com python-docx: {exc}")
 
         document.add_paragraph()
-        document.add_heading("Histórico de Revisões", level=2)
+        document.add_paragraph("Histórico de Revisões")
 
         table = document.add_table(rows=2, cols=3)
         table.rows[0].cells[0].text = "Versão"
