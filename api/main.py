@@ -43,6 +43,13 @@ def _payload_to_dict(payload: DocumentSchema) -> dict:
     return payload.dict(exclude_none=True)
 
 
+def _update_existing_revision_paragraph(document: Document, revision: str) -> None:
+    for paragraph in document.paragraphs:
+        if paragraph.text.startswith("Revisão: "):
+            paragraph.text = f"Revisão: {revision}"
+            return
+
+
 @app.post("/generate-docx")
 def generate_docx(payload: DocumentSchema) -> FileResponse:
     try:
@@ -103,6 +110,11 @@ def append_history_table(payload: AppendHistoryTableRequest) -> PowerAutomateRes
             document = Document(BytesIO(source_bytes))
         except Exception as exc:
             raise ValueError(f"Erro ao abrir DOCX com python-docx: {exc}")
+
+        if payload.historico:
+            _update_existing_revision_paragraph(
+                document=document, revision=str(payload.historico[-1].versao)
+            )
 
         document.add_paragraph()
         document.add_paragraph("Histórico de Revisões")
