@@ -64,5 +64,6 @@ def gerar_capa(
     _add_cover_spacing(doc, lines=2)
 
     _add_cover_line(doc, f"Código: {document_code}", "cover_meta", "cover_meta")
+    _add_cover_line(doc, f"Revisão: {revision}", "cover_meta", "cover_meta")
     _add_cover_line(doc, f"Data: {date}", "cover_meta", "cover_meta")
     doc.add_page_break()
